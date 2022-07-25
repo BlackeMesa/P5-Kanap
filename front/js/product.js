@@ -6,6 +6,9 @@ const idOptions = document.getElementById("colors");
 const urlId = window.location.search;
 const urlParams = new URLSearchParams(urlId);
 const id = urlParams.get('id');
+const addProduct = document.getElementById("addToCart");
+const selectcolor = document.getElementById("colors");
+const selectquantity = document.getElementById("quantity");
  
 // Create the options colors for each items //
 
@@ -75,11 +78,11 @@ let productObject = {
 };
 
 
-const addProduct = document.getElementById("addToCart");
+
 // Function that define the color in the object above //
-function objectColor() {
-let selectcolor = document.getElementById("colors");
 let selectedcolor = selectcolor.options[selectcolor.selectedIndex].value;
+function objectColor() {
+
 let textcolor = selectcolor.options[selectcolor.selectedIndex].text;
 selectedcolor !== "" ? textcolor : alert("Veuillez sélectionner une couleur !");
 productObject.color = selectedcolor;
@@ -87,7 +90,7 @@ productObject.color = selectedcolor;
 
 // Function that define the quantity in the object above //
 function objectQuantity() {
-   let selectquantity = document.getElementById("quantity");
+   
    let selectedquantity = selectquantity.value;
    selectedquantity > 0 ? selectedquantity : alert("Veuillez sélectionner une quantitée !");
    productObject.quantity = selectedquantity;
@@ -124,8 +127,11 @@ addProduct.addEventListener("click", function(e) {
   objectQuantity();
  let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
  let z = false;
+if (selectedcolor === '' || selectquantity.value == 0) {
+alert('Tout les champs requis ne sont pas complétés')
+ }
+ else {
  for (i in productInLocalStorage){
-  
   // Change the quantity into the localStorage //
   if (productObject.id === productInLocalStorage[i].id && productObject.color === productInLocalStorage[i].color){
 newQuantity(productInLocalStorage);
@@ -139,8 +145,9 @@ newQuantity(productInLocalStorage);
  if (productInLocalStorage == undefined) {
    arrayLocalStorage(productInLocalStorage);
  }
+ console.log(productInLocalStorage)
 }
-);
+});
 
 
 

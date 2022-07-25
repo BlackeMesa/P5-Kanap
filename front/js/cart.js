@@ -130,6 +130,10 @@ fetch(url)
 // Use the data API to display the basket //
   .then(function (data) {
     let i = 0
+    if (jsonPanier === null){
+      alert('Votre panier est vide')
+    }
+    else{
     while (i < jsonPanier.length){
         const Panier = jsonPanier[i];
         for (let a = 0; a < data.length; a++) {
@@ -184,8 +188,9 @@ i++;
     totalPrice.innerHTML = Number(totalPrice.textContent.split(" ")[0]) - Number(initialPrice.split(" ")[0]);
     })
   }
+}
 })
- .catch((error) => alert("Erreur : " + error));
+ 
 
 
 
@@ -209,13 +214,14 @@ function pushContact(i, inputValue){
 
 
 const div = document.getElementsByClassName("cart__order__form__question")
-let validation = 0
+let validation = [false, false, false, false, false]
+let confirmation = 0
 // For Loop to verify each input text with regex //
 for( let i = 0; i < div.length; i++){
 const input = div[i].getElementsByTagName("input");
 let regex = '';
 if (i === 0 || i === 1 || i === 3){
-   regex = new RegExp(/^[a-zA-Z\-]+$/);
+   regex = new RegExp(/^[a-z ,.'-]+$/i);
 }
 if ( i === 2) {
   regex = new RegExp(/^\s*\S+(?:\s+\S+){2}/);
@@ -231,15 +237,22 @@ regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~
      if (test) {
        input[0].style.background = "green";
        pushContact(i, input[0].value)
-       validation++;
+       validation[i] = true;
      } else if (input[0].value === "") {
        input[0].style.background = "white";
-       validation--;
+       validation[i]= false;
      } else {
        alert("Format Saisie Invalide");
        input[0].value = "";
        input[0].style.background = "white";
      }
+     validation.forEach(function validationFunction(bolléen) {
+       if (bolléen === true) {
+         confirmation = 1;
+       } else {
+         confirmation = 0;
+       }
+     });
  })
 }
 
@@ -248,40 +261,43 @@ let products = [];
 for (i in jsonPanier){
 products.push(jsonPanier[i].id)
 }
+
 function postForm() {
   const order = document.getElementById("order");
  
   
   order.addEventListener("click", (event) => {
     event.preventDefault();
-     if (validation <= 5) {
-alert("Veuillez renseigner les champs manquants !")
-  }
-  else {
-    const sendFormData = {
-      contact,
-      products,
-    };
+    
+      if (confirmation === 0) {
+        alert("Veuillez renseigner les champs manquants !");
+      } else {
+        const sendFormData = {
+          contact,
+          products,
+        };
 
-    // j'envoie le formulaire + localStorage (sendFormData)
-    // ... que j'envoie au serveur
+        // j'envoie le formulaire + localStorage (sendFormData)
+        // ... que j'envoie au serveur
 
-    const options = {
-      method: "POST",
-      body: JSON.stringify(sendFormData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+        const options = {
+          method: "POST",
+          body: JSON.stringify(sendFormData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
 
-    fetch("http://localhost:3000/api/products/order", options)
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("orderId", data.orderId);
-        document.location.href = "confirmation.html?id=" + data.orderId;
-      })
-      .catch((error) => alert("Erreur : " + error));
-    }
+        fetch("http://localhost:3000/api/products/order", options)
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem("orderId", data.orderId);
+            document.location.href = "confirmation.html?id=" + data.orderId;
+          })
+          .catch((error) => alert("Erreur : " + error));
+      }
+    ;
+  
   }); // fin eventListener postForm
 } // fin envoi du formulaire postForm
 postForm();
