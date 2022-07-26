@@ -80,9 +80,9 @@ let productObject = {
 
 
 // Function that define the color in the object above //
-let selectedcolor = selectcolor.options[selectcolor.selectedIndex].value;
-function objectColor() {
 
+function objectColor() {
+let selectedcolor = selectcolor.options[selectcolor.selectedIndex].value;
 let textcolor = selectcolor.options[selectcolor.selectedIndex].text;
 selectedcolor !== "" ? textcolor : alert("Veuillez sélectionner une couleur !");
 productObject.color = selectedcolor;
@@ -127,6 +127,7 @@ addProduct.addEventListener("click", function(e) {
   objectQuantity();
  let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
  let z = false;
+ let selectedcolor = selectcolor.options[selectcolor.selectedIndex].value;
 if (selectedcolor === '' || selectquantity.value == 0) {
 alert('Tout les champs requis ne sont pas complétés')
  }
