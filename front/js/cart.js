@@ -79,7 +79,7 @@ function createElement(itemApi, itemPanier) {
   let titreDes = createNode ("h2");
   let pDes1= createNode ("p")
   let pDes2 = createNode ("p")
-  titreDes.innerHTML = "Nom du produit";
+  titreDes.innerHTML = `${itemApi.name}`;
   pDes1.innerHTML = `${itemPanier.color}`
   pDes2.innerHTML = `${itemApi.price} €`;
   append(divContent, divDescription);
@@ -215,7 +215,8 @@ function pushContact(i, inputValue){
 
 const div = document.getElementsByClassName("cart__order__form__question")
 let validation = [false, false, false, false, false]
-let confirmation = 0
+
+
 // For Loop to verify each input text with regex //
 for( let i = 0; i < div.length; i++){
 const input = div[i].getElementsByTagName("input");
@@ -246,13 +247,7 @@ regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~
        input[0].value = "";
        input[0].style.background = "white";
      }
-     validation.forEach(function validationFunction(bolléen) {
-       if (bolléen === true) {
-         confirmation = 1;
-       } else {
-         confirmation = 0;
-       }
-     });
+    
  })
 }
 
@@ -268,8 +263,8 @@ function postForm() {
   
   order.addEventListener("click", (event) => {
     event.preventDefault();
-    
-      if (confirmation === 0) {
+    let confirmation = validation.includes(false);
+      if (confirmation === true) {
         alert("Veuillez renseigner les champs manquants !");
       } else {
         const sendFormData = {

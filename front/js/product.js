@@ -43,6 +43,7 @@ function createElement(item){
    img.src = item.imageUrl;
    content.innerHTML = `${item.description}`;
    price.innerHTML = `${item.price} €`;
+   document.title = item.name;
    append(classImg, img);
    append(classContent, title);
    append(classContent, price);
