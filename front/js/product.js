@@ -118,6 +118,7 @@ function arrayLocalStorage(productInLocalStorage){
   productInLocalStorage = [];
   productInLocalStorage.push(productObject);
   localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+  alert("Votre produit a été ajouté !");
 }
 
 
